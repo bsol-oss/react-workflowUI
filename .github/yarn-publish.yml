@@ -1,0 +1,58 @@
+# This workflow will run tests using node and then publish a package to NPM when a release is created
+# Also deploy to GitHub pages
+
+name: Node.js Package
+
+on:
+    push:
+        branches:
+            - main
+        paths-ignore:
+            - '**.md'
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+            - run: yarn install
+            - run: yarn test
+
+    publish:
+        name: Publish package to npmjs
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+                  registry-url: 'https://registry.npmjs.org'
+            - run: git config --global user.email "ross@bsoltec.com"
+            - run: git config --global user.name "Ross Chiu"
+            - run: yarn install
+            - run: yarn build
+            - run: yarn version --patch
+            - run: yarn publish . && git push --tags && git push && echo \"Successfully released version $npm_package_version!\"
+              env:
+                  NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+
+    deploy:
+        name: Deploy site to gh-pages
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: '16'
+            - run: yarn install
+            - run: yarn build-storybook
+            - run: |
+                  git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+                  yarn deploy -u "github-actions-bot <support+actions@github.com>"
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
