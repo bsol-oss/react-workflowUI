@@ -3,6 +3,9 @@
   "version": "0.1.1",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
+   "files": [
+        "dist"
+    ],
   "devDependencies": {
     "@babel/preset-react": "^7.22.3",
     "@rollup/plugin-commonjs": "^25.0.0",
