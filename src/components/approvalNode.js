@@ -58,7 +58,7 @@ export default memo(({ data, isConnectable }) => {
         </div>
         <div style={{ width: "200px", paddingBottom: '10px' }}>
           <label>Approver:</label>
-          <select value={approver} style={{ width: '192px' }} onChange={(e) => { handleApproverChange(e)}} >
+          <select value={approver} style={{ width: '200px' }} onChange={(e) => { handleApproverChange(e)}} >
             <option  value=""></option>
             {
               data.approverOpt.map((item, index) => {
