@@ -49,11 +49,11 @@ export default memo(({ data, isConnectable }) => {
         <div style={{ width: "200px" }}>
           <label>Method:</label>
           <select value={method} style={{ width: "200px" }} onChange={(e) => handleChange(e)} >
-            <option value=""></option>
-            <option value="ALL">ALL</option>
-            <option value="ONE">ONE</option>
-            <option value="MAJORITY">MAJORITY</option>
-            <option value="VETTING">VETTING</option>
+            <option value=''></option>
+            <option value='ALL'>ALL</option>
+            <option value='ONE'>ONE</option>
+            <option value='MAJORITY'>MAJORITY</option>
+            <option value='VETTING'>VETTING</option>
           </select>
         </div>
         <div style={{ width: "200px", paddingBottom: '10px' }}>
