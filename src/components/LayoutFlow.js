@@ -233,7 +233,7 @@ const LayoutFlow = (workflowJson) => {
             onInit={setReactFlowInstance}
             onDrop={onDrop}
             onDragOver={onDragOver}
-            fitView="true"
+            fitView
           >
             <Background id="1" gap={10} color="#f1f1f1" variant={BackgroundVariant.Lines} />
             <Background id="2" gap={100} offset={1} color="#ccc" variant={BackgroundVariant.Lines} />
