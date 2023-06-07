@@ -49,6 +49,7 @@ export default memo(({ data, isConnectable }) => {
         <div style={{ width: "200px" }}>
           <label>Method:</label>
           <select value={method} style={{ width: "200px" }} onChange={(e) => handleChange(e)} >
+            <option value=""></option>
             <option value="ALL">ALL</option>
             <option value="ONE">ONE</option>
             <option value="MAJORITY">MAJORITY</option>
@@ -57,11 +58,15 @@ export default memo(({ data, isConnectable }) => {
         </div>
         <div style={{ width: "200px", paddingBottom: '10px' }}>
           <label>Approver:</label>
-          <input value={approver} style={{ width: '192px' }} onChange={(e) => { handleApproverChange(e)}} />
+          <select value={approver} style={{ width: '192px' }} onChange={(e) => { handleApproverChange(e)}} >
+            <option  value=""></option>
+            {
+              data.approverOpt.map((item, index) => {
+                return <option key={index} value={item}>{item}</option>
+              })
+            }
+          </select>
         </div>
-        {/* <div style={{ width: "200px" }}>
-          {data.approver}
-        </div> */}
         {
           <div
             style={{

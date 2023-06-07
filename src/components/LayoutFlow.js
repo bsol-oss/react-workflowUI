@@ -69,10 +69,11 @@ const getLayoutedElements = (nodes, edges, direction = "TB") => {
   return { nodes, edges };
 };
 
-const workflowToNodesEdges = (workflowJson) => {
+const workflowToNodesEdges = (workflowJson,grouparray) => {
   let tempNodes = [];
   let tempEdges = [];
   workflowJson.forEach((data, index) => {
+    data.approverOpt = grouparray;
     let tempNode = {
       id: data.taskId.toString(),
       type: "selectorNode",
@@ -106,7 +107,7 @@ const workflowToNodesEdges = (workflowJson) => {
   return { nodes: tempNodes, edges: tempEdges };
 }
 
-const LayoutFlow = (workflowJson,setworkflowJson) => {
+const LayoutFlow = (workflowJson) => {
   const reactFlowWrapper = useRef(null);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -117,7 +118,7 @@ const LayoutFlow = (workflowJson,setworkflowJson) => {
     if(workflowJson.workflowJson === null){
       return;
     }
-    const { nodes: tempNodes1, edges: tempEdges1 } = workflowToNodesEdges(workflowJson.workflowJson);
+    const { nodes: tempNodes1, edges: tempEdges1 } = workflowToNodesEdges(workflowJson.workflowJson,workflowJson.grouparray);
 
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
       tempNodes1,
@@ -127,7 +128,6 @@ const LayoutFlow = (workflowJson,setworkflowJson) => {
     setEdges(layoutedEdges);
   },[])
 
-  //saving the workflow
   const onSave = useCallback(() => {
     if (reactFlowInstance) {
       const flow = reactFlowInstance.toObject();
@@ -156,7 +156,7 @@ const LayoutFlow = (workflowJson,setworkflowJson) => {
       });
 
       console.log('nodeArr: ', nodeArr);
-      setworkflowJson(nodeArr)
+      workflowJson.setworkflowJson(nodeArr);
     }
   }, [reactFlowInstance]);
 
@@ -183,10 +183,12 @@ const LayoutFlow = (workflowJson,setworkflowJson) => {
     [nodes, edges]
   );
 
+
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
   }, []);
+
 
   const onDrop = (event) => {
     event.preventDefault();
@@ -207,7 +209,7 @@ const LayoutFlow = (workflowJson,setworkflowJson) => {
       type,
       position,
       style: { border: "1px solid #777", padding: 10, background: "#fff" },
-      data: { taskId: nodes.length, method: "", approver: "", NextAction: { APPROVED: [], REJECTED: [] } },
+      data: { taskId: nodes.length, method: "", approver: "", NextAction: { APPROVED: [], REJECTED: [] }, approverOpt:workflowJson.grouparray},
     };
     setNodes((nds) => nds.concat(newNode));
   }
