@@ -106,7 +106,7 @@ const workflowToNodesEdges = (workflowJson) => {
   return { nodes: tempNodes, edges: tempEdges };
 }
 
-const LayoutFlow = (workflowJson) => {
+const LayoutFlow = (workflowJson,setworkflowJson) => {
   const reactFlowWrapper = useRef(null);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -127,6 +127,7 @@ const LayoutFlow = (workflowJson) => {
     setEdges(layoutedEdges);
   },[])
 
+  //saving the workflow
   const onSave = useCallback(() => {
     if (reactFlowInstance) {
       const flow = reactFlowInstance.toObject();
@@ -155,7 +156,7 @@ const LayoutFlow = (workflowJson) => {
       });
 
       console.log('nodeArr: ', nodeArr);
-
+      setworkflowJson(nodeArr)
     }
   }, [reactFlowInstance]);
 
@@ -182,12 +183,10 @@ const LayoutFlow = (workflowJson) => {
     [nodes, edges]
   );
 
-
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
   }, []);
-
 
   const onDrop = (event) => {
     event.preventDefault();
