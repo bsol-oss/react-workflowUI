@@ -234,6 +234,7 @@ const LayoutFlow = (workflowJson) => {
             onDrop={onDrop}
             onDragOver={onDragOver}
             fitView
+            onLoad={(instance) => setTimeout(() => instance.fitView(), 0)}
           >
             <Background id="1" gap={10} color="#f1f1f1" variant={BackgroundVariant.Lines} />
             <Background id="2" gap={100} offset={1} color="#ccc" variant={BackgroundVariant.Lines} />
