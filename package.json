@@ -46,7 +46,9 @@
     "dagre": "latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "reactflow": "^11.7.2"
+    "reactflow": "^11.7.2",
+    "framer-motion": "^10.12.16",
+    "@chakra-ui/react": "^2.7.0"
   },
   "dependencies": {}
 }
