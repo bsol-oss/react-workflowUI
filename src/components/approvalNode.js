@@ -3,9 +3,6 @@ import {
   Handle, 
   Position
 } from "reactflow";
-import { 
-  ChakraBaseProvider
-} from '@chakra-ui/react'
 
 export default memo(({ data, isConnectable }) => {
 
@@ -28,8 +25,7 @@ export default memo(({ data, isConnectable }) => {
   }
 
   return (
-    <ChakraBaseProvider>
-      <div style={{borderRadius:'10px',border:'1px solid',background:'#fff',padding:'10px'}}>
+      <div style={{borderRadius:'10px',border:'1px solid',background:'#fff',padding:'15px 5px'}}>
         <Handle
           type="target"
           position={Position.Top}
@@ -39,7 +35,7 @@ export default memo(({ data, isConnectable }) => {
         />
         <div
           style={{
-            width: "250px",
+            width: "225px",
             display: "flex",
             flexDirection: "column",
             gap: "5px",
@@ -48,15 +44,15 @@ export default memo(({ data, isConnectable }) => {
         >
           <div style={{ width: "200px" }}>
             <label>Task ID:</label>
-            <input type="text" value={data.taskId} disabled style={{ padding: '0px 0px 0px 5px',width: '200px',height:'25px',borderRadius:'5px',border: "1px solid #555" }} />
+            <input type="text" value={data.taskId} disabled style={{ padding: '0px 0px 0px 5px',width: '100%',height:'25px',borderRadius:'5px',border: "1px solid #555" }} />
           </div>
           <div style={{ width: "200px" }}>
             <label>Name:</label>
-            <input type="text" value={taskname} style={{padding: '0px 0px 0px 5px', width: '200px',height:'25px',borderRadius:'5px',border: "1px solid #555" }} onChange={(e) => { handleNameChange(e)}} />
+            <input type="text" value={taskname} style={{padding: '0px 0px 0px 5px', width: '100%',height:'25px',borderRadius:'5px',border: "1px solid #555" }} onChange={(e) => { handleNameChange(e)}} />
           </div>
           <div style={{ width: "200px" }}>
             <label>Method:</label>
-            <select value={method} style={{ width: "200px",height:'25px',borderRadius:'5px',border: "1px solid #555" }} onChange={(e) => handleChange(e)} >
+            <select value={method} style={{ width: "100%",height:'25px',borderRadius:'5px',border: "1px solid #555" }} onChange={(e) => handleChange(e)} >
               <option value=""></option>
               <option value="ALL">ALL</option>
               <option value="ONE">ONE</option>
@@ -66,7 +62,7 @@ export default memo(({ data, isConnectable }) => {
           </div>
           <div style={{ width: "200px", paddingBottom: '10px' }}>
             <label>Approver:</label>
-            <select  value={approver} style={{ width: '200px',height:'25px',borderRadius:'5px',border: "1px solid #555" }} onChange={(e) => { handleApproverChange(e)}} >
+            <select  value={approver} style={{ width: '100%',height:'25px',borderRadius:'5px',border: "1px solid #555" }} onChange={(e) => { handleApproverChange(e)}} >
               <option value=""></option>
               {
                 data.approverOpt.map((item, index) => {
@@ -97,7 +93,7 @@ export default memo(({ data, isConnectable }) => {
           type="source"
           position={Position.Bottom}
           id="a"
-          style={{ background: "#555", width: "15px", height: '15px', marginBottom: '-8px', Bottom: 10, left: 90, borderRadius: '0px' }}
+          style={{ background: "#555", width: "15px", height: '15px', marginBottom: '-8px', Bottom: 10, left: 70, borderRadius: '0px' }}
           isConnectable={isConnectable}
         />
 
@@ -111,6 +107,5 @@ export default memo(({ data, isConnectable }) => {
         />
 
       </div>
-    </ChakraBaseProvider>
   );
 });

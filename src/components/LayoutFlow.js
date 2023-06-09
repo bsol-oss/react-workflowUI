@@ -34,7 +34,7 @@ const nodeColor = (node) => {
       return '#00BFFF';
   }
 };
-const nodeWidth = 250;
+const nodeWidth = 225;
 const nodeHeight = 280;
 
 const getLayoutedElements = (nodes, edges, direction = "TB") => {
@@ -78,7 +78,6 @@ const workflowToNodesEdges = (workflowJson,grouparray) => {
       id: data.taskId.toString(),
       type: "selectorNode",
       data: data,
-      style: { border: "1px solid #777", padding: "10px", background: "#fff" },
       position: { x: 0, y: 0 }
     };
     tempNodes.push(tempNode);
@@ -208,7 +207,6 @@ const LayoutFlow = (workflowJson) => {
       id: nodes.length.toString(),
       type,
       position,
-      style: { border: "1px solid #777", padding: 10, background: "#fff" },
       data: { taskId: nodes.length, method: "", approver: "", NextAction: { APPROVED: [], REJECTED: [] }, approverOpt:workflowJson.grouparray},
     };
     setNodes((nds) => nds.concat(newNode));
@@ -220,7 +218,7 @@ const LayoutFlow = (workflowJson) => {
 
   return (
     <div className="dndflow">
-      <ReactFlowProvider>
+      <ReactFlowProvider style={{width: '100%',height: '90%'}}>
         <div className="reactflow-wrapper flowBody" ref={reactFlowWrapper}>
           <ReactFlow
             nodes={nodes}
@@ -234,13 +232,14 @@ const LayoutFlow = (workflowJson) => {
             onDrop={onDrop}
             onDragOver={onDragOver}
             fitView
+            onLoad={(instance) => setTimeout(() => instance.fitView(), 0)}
           >
             <Background id="1" gap={10} color="#f1f1f1" variant={BackgroundVariant.Lines} />
             <Background id="2" gap={100} offset={1} color="#ccc" variant={BackgroundVariant.Lines} />
             <MiniMap nodeColor={nodeColor} nodeStrokeWidth={3} zoomable pannable />
             <Panel position="top-right">
-              <button onClick={() => onLayout("TB")}>Vertical Layout</button>
-              <button onClick={onSave}>Save</button>
+                <button onClick={() => onLayout("TB")}>Vertical Layout</button>
+                <button colorScheme='teal' size='lg' onClick={onSave}>Save</button>
             </Panel>
             <Panel position="bottom-center">
               <Sidebar />
