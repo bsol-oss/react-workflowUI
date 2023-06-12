@@ -238,9 +238,13 @@ const LayoutFlow = (workflowJson) => {
             <Background id="1" gap={10} color="#f1f1f1" variant={BackgroundVariant.Lines} />
             <Background id="2" gap={100} offset={1} color="#ccc" variant={BackgroundVariant.Lines} />
             <MiniMap nodeColor={nodeColor} nodeStrokeWidth={3} zoomable pannable />
-            <Panel position="top-right">
-                <button onClick={() => onLayout("TB")}>Vertical Layout</button>
-                <button colorScheme='teal' size='lg' onClick={onSave}>Save</button>
+            <Panel style={{display:'flex',gap:'5px'}} position="top-right">
+                <button style={{fontFamily:'roboto, Noto Sans TC, Noto Sans SC, sans-serif',padding:'3px 6px',border:'1px solid #4c4cef',borderRadius:'3px',backgroundColor:'#4c4cef',color:'white'}} onClick={() => onLayout("TB")}>
+                  Typesetting
+                  </button>
+                <button style={{fontFamily:'roboto, Noto Sans TC, Noto Sans SC, sans-serif',padding:'3px 6px',border:'1px solid #4c4cef',borderRadius:'3px',backgroundColor:'#4c4cef',color:'white'}} colorScheme='teal' size='lg' onClick={onSave}>
+                  Save
+                </button>
             </Panel>
             <Panel position="bottom-center">
               <Sidebar />
