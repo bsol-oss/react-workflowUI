@@ -136,7 +136,7 @@ const LayoutFlow = (workflowJson) => {
         let obj = {
           taskId: node.data.taskId,
           method: node.data.method,
-          approver: node.data.approver,
+          approver: [node.data.approver],
           name: node.data.name,
           NextAction: {
             APPROVED: [],
