@@ -218,9 +218,9 @@ const LayoutFlow = (workflowJson) => {
 
 
   return (
-    <div className="dndflow">
+    <div style={{width: '100%',height: '100%'}}>
       <ReactFlowProvider style={{width: '100%',height: '90%'}}>
-        <div className="reactflow-wrapper flowBody" ref={reactFlowWrapper}>
+        <div className="reactflow-wrapper" ref={reactFlowWrapper}>
           <ReactFlow
             nodes={nodes}
             edges={edges}
