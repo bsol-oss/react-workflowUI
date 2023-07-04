@@ -1,3 +1,4 @@
 import LayoutFlow from "./components/LayoutFlow";
+import ViewLayoutFlow from "./components/viewLayout";
 
-export default LayoutFlow;
+export {LayoutFlow,ViewLayoutFlow};

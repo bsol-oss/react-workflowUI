@@ -7,9 +7,7 @@ import ReactFlow, {
   useEdgesState,
   ReactFlowProvider,
   Controls,
-  MiniMap,
-  Background,
-  BackgroundVariant
+  MiniMap
 } from "reactflow";
 import dagre from "dagre";
 import ApprovalNode from "./approvalNode";
