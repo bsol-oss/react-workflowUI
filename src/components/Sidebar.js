@@ -10,9 +10,22 @@ const Sidebar = () => {
 
     return (
         <aside>
-            <div className="description">You can drag these nodes to the pane.</div>
-            <div className="dndnode input" onDragStart={(event) => onDragStart(event, 'selectorNode')} draggable>
-                Workflow Node
+            <div style={{marginBottom:'10px'}}>You can drag these nodes to the pane.</div>
+            <div style={{
+                height: '20px',
+                padding: '4px',
+                border:' 1px solid #0041d0',
+                borderRadius: '2px',
+                marginBottom: '10px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                cursor: 'grab',
+                borderColor: '#0041d0'
+                }} 
+                onDragStart={(event) => onDragStart(event, 'selectorNode')} 
+                draggable>
+                    Workflow Node
             </div>
         </aside>
     );
