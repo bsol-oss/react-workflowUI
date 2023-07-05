@@ -242,7 +242,7 @@ const LayoutFlow = (workflowJson) => {
                   Save
                 </button>
             </Panel>
-            <Panel position="bottom-center">
+            <Panel position="bottom-center" style={{backgroundColor:'white',border:'1px solid #4c4cef',padding:'15px',borderRadius:'5px'}}>
               <Sidebar />
             </Panel>
             <Controls />
