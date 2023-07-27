@@ -196,6 +196,7 @@ const ViewLayoutFlow = (workflowJson) => {
                 </div>
                 <div style={{padding:'0px 3%',display:'flex',borderRadius:'10px',flexDirection:'row',gap:'10px',flexWrap:'wrap',justifyContent:'center' }}>
                 {
+                  (typeof(dataForDetail?.approver[0]) !== 'string') &&
                     dataForDetail?.approver.map((item)=>{
                         return(<>
                         {
