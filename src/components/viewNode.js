@@ -52,10 +52,13 @@ export default memo(({ data, isConnectable }) => {
             <label>Method:</label>
             <div style={{ border:"1px solid #bababa",padding: '0px 0px 0px 5px',borderRadius:'5px',backgroundColor:'white'}}>{data.method}</div>
           </div>
-          <div style={{ width: "200px" }}>
-            <label>Status:</label>
-            <div style={{ border:"1px solid #bababa",padding: '0px 0px 0px 5px',borderRadius:'5px',backgroundColor:'white'}}>{data.status}</div>
-          </div>
+          {
+          data?.status &&
+            <div style={{ width: "200px" }}>
+              <label>Status:</label>
+              <div style={{ border:"1px solid #bababa",padding: '0px 0px 0px 5px',borderRadius:'5px',backgroundColor:'white'}}>{data.status}</div>
+            </div>
+          }
           { 
           (data.approver !== '') &&
           <div style={{ width: "200px" }}>
