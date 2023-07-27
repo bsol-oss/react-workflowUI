@@ -31,7 +31,7 @@ const nodeColor = (node) => {
   }
 };
 const nodeWidth = 225;
-const nodeHeight = 300;
+const nodeHeight = 325;
 
 const getLayoutedElements = (nodes, edges, direction = "TB") => {
   const isHorizontal = direction === "LR";
