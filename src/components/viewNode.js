@@ -68,7 +68,7 @@ export default memo(({ data, isConnectable }) => {
                   width: "200px",
                   display: "flex",
                   justifyContent: "space-between",
-                  marginBottom: '5px'
+                  marginBottom: '-15px'
                 }}
               >
                 <div style={{ borderRadius:'5px',border: "1px solid #bababa", width: "90px",textAlign:"center",backgroundColor:'white' }}>
