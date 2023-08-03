@@ -52,13 +52,6 @@ export default memo(({ data, isConnectable }) => {
             <label>Method:</label>
             <div style={{ border:"1px solid #bababa",padding: '0px 0px 0px 5px',borderRadius:'5px',backgroundColor:'white'}}>{data.method}</div>
           </div>
-          {
-          data?.status &&
-            <div style={{ width: "200px" }}>
-              <label>Status:</label>
-              <div style={{ border:"1px solid #bababa",padding: '0px 0px 0px 5px',borderRadius:'5px',backgroundColor:'white'}}>{data.status}</div>
-            </div>
-          }
           { 
           (data.approver !== '') &&
           <div style={{ width: "200px" }}>
@@ -74,14 +67,15 @@ export default memo(({ data, isConnectable }) => {
                 style={{
                   width: "200px",
                   display: "flex",
-                  justifyContent: "space-between"
+                  justifyContent: "space-between",
+                  marginBottom: '5px'
                 }}
               >
                 <div style={{ borderRadius:'5px',border: "1px solid #bababa", width: "90px",textAlign:"center",backgroundColor:'white' }}>
-                  Approved
+                  Approve
                 </div>
                 <div style={{ borderRadius:'5px',border: "1px solid #bababa", width: "90px",textAlign:"center",backgroundColor:'white' }}>
-                  Rejected
+                  Reject
                 </div>
               </div>
             }

@@ -80,10 +80,10 @@ export default memo(({ data, isConnectable }) => {
               }}
             >
               <div style={{ borderRadius:'5px',border: "1px solid #555", width: "90px",textAlign:"center" }}>
-                Approved
+                Approve
               </div>
               <div style={{ borderRadius:'5px',border: "1px solid #555", width: "90px",textAlign:"center" }}>
-                Rejected
+                Reject
               </div>
             </div>
           }
