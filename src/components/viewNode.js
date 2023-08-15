@@ -71,10 +71,10 @@ export default memo(({ data, isConnectable }) => {
                   marginBottom: '-15px'
                 }}
               >
-                <div style={{ borderRadius:'5px',border: "1px solid #bababa", width: "90px",textAlign:"center",backgroundColor:'white' }}>
+                <div style={{ borderRadius:'5px', width: "90px",textAlign:"center" }}>
                   Approve
                 </div>
-                <div style={{ borderRadius:'5px',border: "1px solid #bababa", width: "90px",textAlign:"center",backgroundColor:'white' }}>
+                <div style={{ borderRadius:'5px', width: "90px",textAlign:"center" }}>
                   Reject
                 </div>
               </div>
