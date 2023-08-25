@@ -188,10 +188,12 @@ const ViewLayoutFlow = (workflowJson) => {
                   <div>Method: {dataForDetail?.method}</div>
                   <div>Approver:</div>
                   {
-                    typeof(dataForDetail?.approver) === 'string' &&
-                    <div>
-                        <div>{dataForDetail?.approver}</div>
-                    </div>
+                    dataForDetail?.approver[0].name === undefined &&
+                    <>
+                      <div>
+                        {dataForDetail?.approver}
+                      </div>
+                    </> 
                   }
                 </div>
                 <div style={{padding:'0px 3%',display:'flex',borderRadius:'10px',flexDirection:'row',gap:'10px',flexWrap:'wrap',justifyContent:'center' }}>
