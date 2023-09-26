@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef, useEffect } from "react";
+import React, { useCallback, useState, useRef, useEffect, useLayoutEffect } from "react";
 import ReactFlow, {
   addEdge,
   ConnectionLineType,
@@ -6,19 +6,80 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   ReactFlowProvider,
-  Controls
+  Controls,
+  MarkerType
 } from "reactflow";
-import dagre from "dagre";
 import viewNode from "./viewNode";
-
+import ELK from 'elkjs/lib/elk.bundled.js';
 import "reactflow/dist/style.css";
 import "../styles.css";
 const nodeTypes = {
   selectorNode: viewNode
 };
 
-const dagreGraph = new dagre.graphlib.Graph();
-dagreGraph.setDefaultEdgeLabel(() => ({}));
+const elk = new ELK();
+const elkOptions = {
+  'elk.algorithm': 'layered',
+  'elk.layered.spacing.nodeNodeBetweenLayers': '100',
+  'elk.spacing.nodeNode': '80',
+  'elk.layered.crossingMinimization.forceNodeModelOrder':true
+};
+let finalSortedArray = [];
+const recurseWorkflow = async (nodes, taskId) => {
+  let task = nodes.find(t => t.id === taskId);
+  if (!task) {
+    return;
+  }
+
+  finalSortedArray.push(task);
+  let nextApprovedTaskIds = task.data.NextAction.APPROVED.length > 0 ? task.data.NextAction.APPROVED : [];
+  let nextREJECTEDTaskIds = task.data.NextAction.REJECTED.length > 0 ? task.data.NextAction.REJECTED : [];
+  if (nextApprovedTaskIds.length > 0) {
+    nextApprovedTaskIds.forEach(async nextTaskId => {
+      await recurseWorkflow(nodes, nextTaskId);
+    });
+  }
+  if (nextREJECTEDTaskIds.length > 0) {
+    nextREJECTEDTaskIds.forEach(async nextTaskId => {
+      await recurseWorkflow(nodes, nextTaskId);
+    });
+  }
+};
+
+const nodeSortValueSetting = async(nodes) =>{
+  await recurseWorkflow(nodes, "0");
+  return finalSortedArray
+}
+
+const getLayoutedElements = async(nodes, edges, options = {}) => {
+  let newNode = await nodeSortValueSetting(nodes);
+  const isHorizontal = options?.['elk.direction'] === 'RIGHT';
+  const graph = {
+    id: 'root',
+    layoutOptions: options,
+    children: newNode.map((node) => ({
+      ...node,
+      targetPosition: isHorizontal ? 'left' : 'top',
+      sourcePosition: isHorizontal ? 'right' : 'bottom',
+      width: nodeWidth,
+      height: nodeHeight,
+    })),
+    edges: edges,
+  };
+  return elk
+    .layout(graph)
+    .then((layoutedGraph) => ({
+      nodes: layoutedGraph.children.map((node) => ({
+        ...node,
+        // React Flow expects a position property on the node instead of `x`
+        // and `y` fields.
+        position: { x: node.x, y: node.y },
+      })),
+
+      edges: layoutedGraph.edges,
+    }))
+    .catch(console.error);
+};
 
 const nodeColor = (node) => {
   switch (node.type) {
@@ -33,37 +94,7 @@ const nodeColor = (node) => {
 const nodeWidth = 225;
 const nodeHeight = 325;
 
-const getLayoutedElements = (nodes, edges, direction = "TB") => {
-  const isHorizontal = direction === "LR";
-  dagreGraph.setGraph({ rankdir: direction });
 
-  nodes.forEach((node) => {
-    dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
-  });
-
-  edges.forEach((edge) => {
-    dagreGraph.setEdge(edge.source, edge.target);
-  });
-
-  dagre.layout(dagreGraph);
-
-  nodes.forEach((node) => {
-    const nodeWithPosition = dagreGraph.node(node.id);
-    node.targetPosition = isHorizontal ? "left" : "top";
-    node.sourcePosition = isHorizontal ? "right" : "bottom";
-
-    // We are shifting the dagre node position (anchor=center center) to the top left
-    // so it matches the React Flow node anchor point (top left).
-    node.position = {
-      x: nodeWithPosition.x - nodeWidth / 2,
-      y: nodeWithPosition.y - nodeHeight / 2
-    };
-
-    return node;
-  });
-
-  return { nodes, edges };
-};
 
 
 const workflowToNodesEdges = (workflowJson,setDataForDetail) => {
@@ -85,7 +116,17 @@ const workflowToNodesEdges = (workflowJson,setDataForDetail) => {
       target: data.NextAction.APPROVED.toString(),
       type: ConnectionLineType.SmoothStep,
       sourceHandle: "a",
-      animated: false
+      animated: false,
+      style: {
+        strokeWidth: 2,
+        stroke: '#8abf8c',
+      },
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+        width: 20,
+        height: 20,
+        color: '#8abf8c',
+      },
     };
     tempEdges.push(edgeAP);
     let edgere = {
@@ -94,7 +135,17 @@ const workflowToNodesEdges = (workflowJson,setDataForDetail) => {
       target: data.NextAction.REJECTED.toString(),
       type: ConnectionLineType.SmoothStep,
       sourceHandle: "b",
-      animated: false
+      animated: false,
+      style: {
+        strokeWidth: 2,
+        stroke: '#cf5151',
+      },
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+        width: 20,
+        height: 20,
+        color: '#cf5151',
+      },
     };
     tempEdges.push(edgere);
   });
@@ -111,43 +162,26 @@ const ViewLayoutFlow = (workflowJson) => {
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [dataForDetail,setdataForDetail] = useState(null);
 
-  useEffect(()=>{
-    console.log('workflowJson: ', workflowJson);
-    if(workflowJson.workflowJson === null){
-      return;
-    }
-    const { nodes: tempNodes1, edges: tempEdges1 } = workflowToNodesEdges(workflowJson.workflowJson,setdataForDetail);
-
-    const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
-      tempNodes1,
-      tempEdges1
-    );
-    setNodes(layoutedNodes);
-    setEdges(layoutedEdges);
-  },[])
-
-  const onConnect = useCallback(
-    (params) =>
-      setEdges((eds) =>
-        addEdge(
-          { ...params, type: ConnectionLineType.SmoothStep, animated: false },
-          eds
-        )
-      ),
-    []
-  );
-
+  const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), []);
   const onLayout = useCallback(
-    (direction) => {
-      const {
-        nodes: layoutedNodes,
-        edges: layoutedEdges
-      } = getLayoutedElements(nodes, edges, direction);
-      setNodes([...layoutedNodes]);
-      setEdges([...layoutedEdges]);
+    ({ direction }) => {
+      const opts = { 'elk.direction': direction, ...elkOptions };
+      const { nodes: tempNodes1, edges: tempEdges1 } = workflowToNodesEdges(workflowJson.workflowJson,setdataForDetail);
+      const ns = tempNodes1
+      const es = tempEdges1
+
+      getLayoutedElements(ns, es, opts).then(({ nodes: layoutedNodes, edges: layoutedEdges }) => {
+        setNodes(layoutedNodes);
+        setEdges(layoutedEdges);
+      });
     },
     [nodes, edges]
   );
+  
+   useLayoutEffect(() => {
+    onLayout({ direction: 'DOWN' });
+  }, []);
+
 
   const setColor = (status) => {
     if(status === 'APPROVED'){
@@ -271,7 +305,7 @@ const ViewLayoutFlow = (workflowJson) => {
                         </div>
                       </div>
                       <div style={{display:'flex',alignItems:'center',gap:'3px'}}>
-                        <div style={{width:'20px',height:'20px',backgroundColor:'#e6edce',border:'1px solid #8f8f8f'}}>
+                        <div style={{width:'20px',height:'20px',backgroundColor:'#fffb80',border:'1px solid #8f8f8f'}}>
                         </div>
                         <div>
                           Pending approval
@@ -286,11 +320,13 @@ const ViewLayoutFlow = (workflowJson) => {
                       </div>
                     </div>
                 </Panel>
-                <Panel style={{display:'flex',gap:'5px'}} position="top-right">
-                    <button style={{fontFamily:'roboto, Noto Sans TC, Noto Sans SC, sans-serif',padding:'3px 6px',border:'1px solid #4c4cef',borderRadius:'3px',backgroundColor:'#4c4cef',color:'white'}} onClick={() => onLayout("TB")}>
-                    Typesetting
-                    </button>
-                </Panel>
+                {
+                  //<Panel style={{display:'flex',gap:'5px'}} position="top-right">
+                  //  <button style={{fontFamily:'roboto, Noto Sans TC, Noto Sans SC, sans-serif',padding:'3px 6px',border:'1px solid #4c4cef',borderRadius:'3px',backgroundColor:'#4c4cef',color:'white'}} onClick={() => onLayout({ direction: 'DOWN'})}>
+                  //  Typesetting
+                  //  </button>
+                  //</Panel>
+                }
                 <Controls />
             </ReactFlow>
             </div>

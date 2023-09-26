@@ -14,7 +14,7 @@ export default memo(({ data, isConnectable }) => {
     }else if(data.status === 'REJECTED'){
       setBackgroundColor('#edcece');
     }else if(data.status === 'PENDING' && data.taskAvailable === true){
-      setBackgroundColor('#e6edce');
+      setBackgroundColor('#fffb80');
     }
     else {
       setBackgroundColor('#fff');

@@ -9,7 +9,7 @@ import ReactFlow, {
   Controls,
   MiniMap
 } from "reactflow";
-import dagre from "dagre";
+import ELK from 'elkjs/lib/elk.bundled.js';
 import ApprovalNode from "./approvalNode";
 import "reactflow/dist/style.css";
 import "../styles.css";
@@ -18,9 +18,15 @@ import Sidebar from "./Sidebar";
 const nodeTypes = {
   selectorNode: ApprovalNode
 };
-
-const dagreGraph = new dagre.graphlib.Graph();
-dagreGraph.setDefaultEdgeLabel(() => ({}));
+const elk = new ELK()
+const elkOptions = {
+  'elk.algorithm': 'layered',
+  'elk.layered.spacing.nodeNodeBetweenLayers': '100',
+  'elk.spacing.nodeNode': '80',
+  'elk.layered.crossingMinimization.strategy':'LAYER_SWEEP',
+  'elk.layered.crossingMinimization.forceNodeModelOrder':true
+};
+let finalSortedArray = [];
 
 const nodeColor = (node) => {
   switch (node.type) {
@@ -35,36 +41,34 @@ const nodeColor = (node) => {
 const nodeWidth = 225;
 const nodeHeight = 280;
 
-const getLayoutedElements = (nodes, edges, direction = "TB") => {
-  const isHorizontal = direction === "LR";
-  dagreGraph.setGraph({ rankdir: direction });
+const getLayoutedElements = async (nodes, edges, options = {}) => {
+  const isHorizontal = options?.['elk.direction'] === 'RIGHT';
+  let newNode = await nodeSortValueSetting(nodes);
 
-  nodes.forEach((node) => {
-    dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
-  });
+  const graph = {
+    id: 'root',
+    layoutOptions: options,
+    children: newNode.map((node) => ({
+      ...node,
+      targetPosition: isHorizontal ? 'left' : 'top',
+      sourcePosition: isHorizontal ? 'right' : 'bottom',
+      width: nodeWidth,
+      height: nodeHeight,
+    })),
+    edges: edges,
+  };
 
-  edges.forEach((edge) => {
-    dagreGraph.setEdge(edge.source, edge.target);
-  });
+  return elk
+    .layout(graph)
+    .then((layoutedGraph) => ({
+      nodes: layoutedGraph.children.map((node) => ({
+        ...node,
+        position: { x: node.x, y: node.y },
+      })),
 
-  dagre.layout(dagreGraph);
-
-  nodes.forEach((node) => {
-    const nodeWithPosition = dagreGraph.node(node.id);
-    node.targetPosition = isHorizontal ? "left" : "top";
-    node.sourcePosition = isHorizontal ? "right" : "bottom";
-
-    // We are shifting the dagre node position (anchor=center center) to the top left
-    // so it matches the React Flow node anchor point (top left).
-    node.position = {
-      x: nodeWithPosition.x - nodeWidth / 2,
-      y: nodeWithPosition.y - nodeHeight / 2
-    };
-
-    return node;
-  });
-
-  return { nodes, edges };
+      edges: layoutedGraph.edges,
+    }))
+    .catch(console.error);
 };
 
 const workflowToNodesEdges = (workflowJson,grouparray) => {
@@ -109,26 +113,34 @@ const LayoutFlow = (workflowJson) => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  const [oldnodes, setOldNodes] = useState([]);
+  const [oldedges, setOldEdges] = useState([]);
+  const [firstRun, setFirstRun] = useState(true);
 
+  useEffect(()=>{
+    if(nodes.length > 0 && firstRun){
+      setFirstRun(false);
+      onLayout({ direction: 'DOWN' });
+    }
+  },[nodes])
   useEffect(()=>{
     console.log('workflowJson: ', workflowJson);
     if(workflowJson.workflowJson === null){
       return;
     }
     const { nodes: tempNodes1, edges: tempEdges1 } = workflowToNodesEdges(workflowJson.workflowJson,workflowJson.grouparray);
-
-    const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
-      tempNodes1,
-      tempEdges1
-    );
-    setNodes(layoutedNodes);
-    setEdges(layoutedEdges);
+    setOldNodes(tempNodes1);
+    setOldEdges(tempEdges1);
   },[])
+
+  useEffect(() => {
+    setEdges(oldedges);
+    setNodes(oldnodes);
+  },[oldnodes,oldedges])
 
   const onSave = useCallback(() => {
     if (reactFlowInstance) {
       const flow = reactFlowInstance.toObject();
-      console.log(flow);
       let nodeArr = [];
       flow.nodes.forEach(node => {
         let obj = {
@@ -170,13 +182,16 @@ const LayoutFlow = (workflowJson) => {
   );
 
   const onLayout = useCallback(
-    (direction) => {
-      const {
-        nodes: layoutedNodes,
-        edges: layoutedEdges
-      } = getLayoutedElements(nodes, edges, direction);
-      setNodes([...layoutedNodes]);
-      setEdges([...layoutedEdges]);
+    ({ direction }) => {
+      const opts = { 'elk.direction': direction, ...elkOptions };
+
+      getLayoutedElements(nodes, edges, opts).then(({ nodes: layoutedNodes, edges: layoutedEdges }) => {
+        console.log('nodesafter: ', layoutedNodes);
+        console.log('edgesafter: ', layoutedEdges);
+        setNodes([...layoutedNodes]);
+        setEdges([...layoutedEdges]);
+      });
+      
     },
     [nodes, edges]
   );
@@ -235,9 +250,11 @@ const LayoutFlow = (workflowJson) => {
           >
             <MiniMap nodeColor={nodeColor} nodeStrokeWidth={3} zoomable pannable />
             <Panel style={{display:'flex',gap:'5px'}} position="top-right">
-                <button style={{fontFamily:'roboto, Noto Sans TC, Noto Sans SC, sans-serif',padding:'3px 6px',border:'1px solid #4c4cef',borderRadius:'3px',backgroundColor:'#4c4cef',color:'white'}} onClick={() => onLayout("TB")}>
-                  Typesetting
-                  </button>
+                {
+                  //<button style={{fontFamily:'roboto, Noto Sans TC, Noto Sans SC, sans-serif',padding:'3px 6px',border:'1px solid #4c4cef',borderRadius:'3px',backgroundColor:'#4c4cef',color:'white'}} onClick={() => onLayout("TB")}>
+                  //  Typesetting
+                  //</button>
+                }
                 <button style={{fontFamily:'roboto, Noto Sans TC, Noto Sans SC, sans-serif',padding:'3px 6px',border:'1px solid #4c4cef',borderRadius:'3px',backgroundColor:'#4c4cef',color:'white'}} colorScheme='teal' size='lg' onClick={onSave}>
                   Save
                 </button>
