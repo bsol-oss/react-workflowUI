@@ -1,6 +1,6 @@
 {
   "name": "@bsol-oss/react-workflowui",
-  "version": "0.1.35",
+  "version": "0.1.36",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "files": [
@@ -48,6 +48,5 @@
     "reactflow": "^11.7.2",
     "elkjs": "^0.8.2"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
