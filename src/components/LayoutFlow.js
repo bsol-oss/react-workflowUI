@@ -38,6 +38,31 @@ const nodeColor = (node) => {
       return '#00BFFF';
   }
 };
+const recurseWorkflow = async (nodes, taskId) => {
+  let task = nodes.find(t => t.id === taskId);
+  if (!task) {
+    return;
+  }
+
+  finalSortedArray.push(task);
+  let nextApprovedTaskIds = task.data.NextAction.APPROVED.length > 0 ? task.data.NextAction.APPROVED : [];
+  let nextREJECTEDTaskIds = task.data.NextAction.REJECTED.length > 0 ? task.data.NextAction.REJECTED : [];
+  if (nextApprovedTaskIds.length > 0) {
+    nextApprovedTaskIds.forEach(async nextTaskId => {
+      await recurseWorkflow(nodes, nextTaskId);
+    });
+  }
+  if (nextREJECTEDTaskIds.length > 0) {
+    nextREJECTEDTaskIds.forEach(async nextTaskId => {
+      await recurseWorkflow(nodes, nextTaskId);
+    });
+  }
+};
+
+const nodeSortValueSetting = async(nodes) =>{
+  await recurseWorkflow(nodes, "0");
+  return finalSortedArray
+}
 const nodeWidth = 225;
 const nodeHeight = 280;
 
