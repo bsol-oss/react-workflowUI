@@ -189,7 +189,8 @@ const LayoutFlow = (workflowJson) => {
           nodeArr[index].NextAction.REJECTED.push(edge.target);
         }
       });
-
+      // Sort by taskId
+      nodeArr.sort((a, b) => a.taskId - b.taskId);
       console.log('nodeArr: ', nodeArr);
       workflowJson.setworkflowJson(nodeArr);
     }
