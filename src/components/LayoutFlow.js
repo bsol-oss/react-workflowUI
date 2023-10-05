@@ -267,11 +267,27 @@ const LayoutFlow = (workflowJson) => {
       x: event.clientX - reactFlowBounds.left,
       y: event.clientY - reactFlowBounds.top,
     });
+
+    //check existing node
+    let tempid = 0;
+    let existingIndex = 0
+    while(existingIndex != -1){
+      console.log('tempid: ', tempid);
+      existingIndex = nodes.findIndex((x) => {
+        return x.id.toString() === tempid.toString();
+      });
+      console.log('existingIndex: ', existingIndex);
+      if(existingIndex !== -1){
+        tempid++;
+      }
+      console.log('existingIndex: ', existingIndex);
+    }
+    console.log('tempid: ', tempid);
     let newNode = {
-      id: nodes.length.toString(),
+      id: tempid.toString(),
       type,
       position,
-      data: { taskId: nodes.length, method: "", approver: "", NextAction: { APPROVED: [], REJECTED: [] }, approverOpt:workflowJson.grouparray},
+      data: { taskId: tempid, method: "", approver: "", NextAction: { APPROVED: [], REJECTED: [] }, approverOpt:workflowJson.grouparray},
     };
     setNodes((nds) => nds.concat(newNode));
   }
