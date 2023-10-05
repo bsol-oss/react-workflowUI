@@ -197,7 +197,7 @@ const LayoutFlow = (workflowJson) => {
       for(let node of nodeArr){
         for(let nodea of nodeArr){
           let nextindex = nodea.NextAction.APPROVED.findIndex((x)=>{
-            return x === nodea.taskId.toString();
+            return x === node.taskId.toString();
           })
           if(nextindex !== -1){
             nodea.NextAction.APPROVED[nextindex] = tempId.toString();
@@ -205,7 +205,7 @@ const LayoutFlow = (workflowJson) => {
           
 
           let nextindex2 = nodea.NextAction.REJECTED.findIndex((x)=>{
-            return x === nodea.taskId.toString();
+            return x === node.taskId.toString();
           })
           if(nextindex2 !== -1){
             nodea.NextAction.REJECTED[nextindex2] = tempId.toString();
