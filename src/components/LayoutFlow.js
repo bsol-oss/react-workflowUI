@@ -191,7 +191,7 @@ const LayoutFlow = (workflowJson) => {
       });
       // Sort by taskId
       nodeArr.sort((a, b) => a.taskId - b.taskId);
-      
+
       //reassign taskId
       let tempId = 0;
       for(let node of nodeArr){
@@ -199,22 +199,22 @@ const LayoutFlow = (workflowJson) => {
           let nextindex = nodea.NextAction.APPROVED.findIndex((x)=>{
             return x === nodea.taskId.toString();
           })
-          if(nextindex == -1){
-            continue;
+          if(nextindex !== -1){
+            nodea.NextAction.APPROVED[nextindex] = tempId.toString();
           }
-          nodea.NextAction.APPROVED[nextindex] = tempId.toString();
+          
 
           let nextindex2 = nodea.NextAction.REJECTED.findIndex((x)=>{
             return x === nodea.taskId.toString();
           })
-          if(nextindex2 == -1){
-            continue;
+          if(nextindex2 !== -1){
+            nodea.NextAction.REJECTED[nextindex2] = tempId.toString();
           }
-          nodea.NextAction.REJECTED[nextindex2] = tempId.toString();
         }
         node.taskId = tempId;
         tempId++;
       }
+
       console.log('nodeArr: ', nodeArr);
       workflowJson.setworkflowJson(nodeArr);
     }
