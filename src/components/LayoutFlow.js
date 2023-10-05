@@ -191,9 +191,27 @@ const LayoutFlow = (workflowJson) => {
       });
       // Sort by taskId
       nodeArr.sort((a, b) => a.taskId - b.taskId);
+      
       //reassign taskId
       let tempId = 0;
       for(let node of nodeArr){
+        for(let nodea of nodeArr){
+          let nextindex = nodea.NextAction.APPROVED.findIndex((x)=>{
+            return x === nodea.taskId.toString();
+          })
+          if(nextindex == -1){
+            continue;
+          }
+          nodea.NextAction.APPROVED[nextindex] = tempId.toString();
+
+          let nextindex2 = nodea.NextAction.REJECTED.findIndex((x)=>{
+            return x === nodea.taskId.toString();
+          })
+          if(nextindex2 == -1){
+            continue;
+          }
+          nodea.NextAction.REJECTED[nextindex2] = tempId.toString();
+        }
         node.taskId = tempId;
         tempId++;
       }
