@@ -191,6 +191,12 @@ const LayoutFlow = (workflowJson) => {
       });
       // Sort by taskId
       nodeArr.sort((a, b) => a.taskId - b.taskId);
+      //reassign taskId
+      let tempId = 0;
+      for(let node of nodeArr){
+        node.taskId = tempId;
+        tempId++;
+      }
       console.log('nodeArr: ', nodeArr);
       workflowJson.setworkflowJson(nodeArr);
     }
