@@ -190,7 +190,7 @@ const ViewLayoutFlow = (workflowJson) => {
     if(status === 'REJECTED'){
       return "#edcece";
     }
-    return "#e6edce";
+    return "#8f8f8f";
   }
 
   return (
@@ -204,10 +204,13 @@ const ViewLayoutFlow = (workflowJson) => {
                     border:'1px solid #bababa',
                     borderRadius:'10px', 
                     backgroundColor:'#fff',
-                    top:'20%',
-                    left:'20%',
-                    width:'60%',
-                    height:'60%',
+                    top:'50%', 
+                    left:'50%', 
+                    transform: 'translate(-50%, -50%)', 
+                    width:'fit-content',
+                    height:'fit-content',
+                    maxWidth:'60%',
+                    maxHeight:'60%',
                     zIndex:'999',
                     display:'sticky',
                     flexDirection:'column',
@@ -222,15 +225,15 @@ const ViewLayoutFlow = (workflowJson) => {
                   <div>Method: {dataForDetail?.method}</div>
                   <div>Approver:</div>
                   {
-                    dataForDetail?.approver[0].name === undefined &&
-                    <>
-                      {
-                        dataForDetail?.approver &&
-                        <div>
-                          {dataForDetail?.approver}
-                        </div>
-                      }
-                    </> 
+                    //dataForDetail?.approver[0].name === undefined &&
+                    //<>
+                    //  {
+                    //    dataForDetail?.approver &&
+                    //    <div>
+                    //      {dataForDetail?.approver}
+                    //    </div>
+                    //  }
+                    //</> 
                   }
                 </div>
                 <div style={{padding:'0px 3%',display:'flex',borderRadius:'10px',flexDirection:'row',gap:'10px',flexWrap:'wrap',justifyContent:'center' }}>
