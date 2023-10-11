@@ -60,6 +60,7 @@ const recurseWorkflow = async (nodes, taskId) => {
 };
 
 const nodeSortValueSetting = async(nodes) =>{
+  finalSortedArray=[];
   await recurseWorkflow(nodes, "0");
   return finalSortedArray
 }
@@ -69,7 +70,7 @@ const nodeHeight = 280;
 const getLayoutedElements = async (nodes, edges, options = {}) => {
   const isHorizontal = options?.['elk.direction'] === 'RIGHT';
   let newNode = await nodeSortValueSetting(nodes);
-
+  
   const graph = {
     id: 'root',
     layoutOptions: options,
