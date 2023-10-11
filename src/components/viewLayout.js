@@ -237,15 +237,19 @@ const ViewLayoutFlow = (workflowJson) => {
               justifyItems: "center",
             }}
           >
-            <RxCross1
-              size="20"
-              position="absolute"
-              right={"5px"}
-              top={"5px"}
+            <div
+              style={{
+                position: "absolute",
+                top: "5px",
+                right: "5px",
+                paddingBottom: "2px",
+              }}
               onClick={() => {
                 setdataForDetail(null);
               }}
-            />
+            >
+              <RxCross1 size="17" />
+            </div>
             <div style={{ padding: "0px 3%" }}>
               {
                 //<div>Task ID: {dataForDetail?.taskId}</div>
