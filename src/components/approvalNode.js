@@ -1,10 +1,12 @@
-import React, { memo } from "react";
+import React, { memo,useCallback } from "react";
 import { 
   Handle, 
-  Position
+  Position,
+  useReactFlow
 } from "reactflow";
+import { RxCross1 } from "react-icons/rx";
 
-export default memo(({ data, isConnectable }) => {
+export default memo(({ id,data, isConnectable }) => {
 
   const [method, setMethod] = React.useState(data.method);
   const [approver, setApprover] = React.useState(data.approver);
@@ -14,6 +16,11 @@ export default memo(({ data, isConnectable }) => {
     data.method = event.target.value;
     setMethod(event.target.value);
   };
+  const { deleteElements } = useReactFlow();
+
+  const onDeleteClick = useCallback(() => {
+    deleteElements({ nodes: [{ id }] });
+  }, [id, deleteElements]);
 
   const handleApproverChange = (event) => {
     data.approver = event.target.value;
@@ -26,6 +33,19 @@ export default memo(({ data, isConnectable }) => {
 
   return (
       <div style={{borderRadius:'10px',border:'1px solid',background:'#fff',padding:'15px 5px'}}>
+        <div 
+          style={{
+                position: "absolute",
+                top: "5px",
+                right: "5px",
+                paddingBottom: "2px",
+              }}
+              onClick={() => {
+                onDeleteClick();
+              }}
+        >
+          <RxCross1 size="17" />
+        </div>
         <Handle
           type="target"
           position={Position.Top}
@@ -33,6 +53,7 @@ export default memo(({ data, isConnectable }) => {
           onConnect={(params) => console.log("handle onConnect", params)}
           isConnectable={isConnectable}
         />
+        
         <div
           style={{
             width: "225px",
@@ -42,17 +63,19 @@ export default memo(({ data, isConnectable }) => {
             alignItems: "center"
           }}
         >
-          <div style={{ width: "200px" }}>
-            <label>Task ID:</label>
-            <input type="text" value={data.taskId} disabled style={{ padding: '0px 0px 0px 5px',width: '100%',height:'25px',borderRadius:'5px',border: "1px solid #555" }} />
-          </div>
-          <div style={{ width: "200px" }}>
+          {
+          //<div style={{ width: "200px" }}>
+          //  <label>Task ID:</label>
+          //  <input type="text" value={data.taskId} disabled style={{ padding: '0px 0px 0px 5px',width: '100%',height:'25px',borderRadius:'5px',border: "1px solid #555" }} />
+          //</div>
+          }
+          <div style={{ width: "193px" }}>
             <label>Name:</label>
             <input type="text" value={taskname} style={{padding: '0px 0px 0px 5px', width: '100%',height:'25px',borderRadius:'5px',border: "1px solid #555" }} onChange={(e) => { handleNameChange(e)}} />
           </div>
           <div style={{ width: "200px" }}>
             <label>Method:</label>
-            <select value={method} style={{ width: "100%",height:'25px',borderRadius:'5px',border: "1px solid #555" }} onChange={(e) => handleChange(e)} >
+            <select value={method} style={{ width: "200px",height:'25px',borderRadius:'5px',border: "1px solid #555" }} onChange={(e) => handleChange(e)} >
               <option value=""></option>
               <option value="ALL">ALL</option>
               <option value="ONE">ONE</option>
@@ -62,11 +85,11 @@ export default memo(({ data, isConnectable }) => {
           </div>
           <div style={{ width: "200px", paddingBottom: '10px' }}>
             <label>Approver:</label>
-            <select  value={approver} style={{ width: '100%',height:'25px',borderRadius:'5px',border: "1px solid #555" }} onChange={(e) => { handleApproverChange(e)}} >
+            <select  value={approver} style={{ width: '200px',height:'25px',borderRadius:'5px',border: "1px solid #555" }} onChange={(e) => { handleApproverChange(e)}} >
               <option value=""></option>
               {
                 data.approverOpt.map((item, index) => {
-                  return <option key={item.label} value={item.value}>{item.label}</option>
+                  return <option key={item} value={item}>{item}</option>
                 })
               }
             </select>
@@ -80,10 +103,10 @@ export default memo(({ data, isConnectable }) => {
               }}
             >
               <div style={{ borderRadius:'5px',border: "1px solid #555", width: "90px",textAlign:"center" }}>
-                Approve
+                Approved
               </div>
               <div style={{ borderRadius:'5px',border: "1px solid #555", width: "90px",textAlign:"center" }}>
-                Reject
+                Rejected
               </div>
             </div>
           }
