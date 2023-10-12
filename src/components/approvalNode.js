@@ -89,7 +89,7 @@ export default memo(({ id,data, isConnectable }) => {
               <option value=""></option>
               {
                 data.approverOpt.map((item, index) => {
-                  return <option key={item} value={item}>{item}</option>
+                  return <option key={item.label} value={item.value}>{item.label}</option>
                 })
               }
             </select>
