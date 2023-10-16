@@ -63,12 +63,12 @@ export default memo(({ id,data, isConnectable }) => {
             alignItems: "center"
           }}
         >
-          {
-          //<div style={{ width: "200px" }}>
-          //  <label>Task ID:</label>
-          //  <input type="text" value={data.taskId} disabled style={{ padding: '0px 0px 0px 5px',width: '100%',height:'25px',borderRadius:'5px',border: "1px solid #555" }} />
-          //</div>
-          }
+          
+          <div style={{ width: "200px" }}>
+            <label>Task ID:</label>
+            <input type="text" value={data.taskId} disabled style={{ padding: '0px 0px 0px 5px',width: '100%',height:'25px',borderRadius:'5px',border: "1px solid #555" }} />
+          </div>
+          
           <div style={{ width: "193px" }}>
             <label>Name:</label>
             <input type="text" value={taskname} style={{padding: '0px 0px 0px 5px', width: '100%',height:'25px',borderRadius:'5px',border: "1px solid #555" }} onChange={(e) => { handleNameChange(e)}} />
