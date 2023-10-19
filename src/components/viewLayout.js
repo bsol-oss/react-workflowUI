@@ -173,7 +173,12 @@ const ViewLayoutFlow = (workflowJson) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [dataForDetail, setdataForDetail] = useState(null);
+  const [grouplist,setgrouplist] = useState([]);
 
+  useEffect(() => {
+    setgrouplist(workflowJson.grouplist);
+  },[])
+  
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
     []
@@ -262,15 +267,8 @@ const ViewLayoutFlow = (workflowJson) => {
               </div>
               <div style={{ whiteSpace: "nowrap" }}>Approver:</div>
               {
-                //dataForDetail?.approver[0].name === undefined &&
-                //<>
-                //  {
-                //    dataForDetail?.approver &&
-                //    <div>
-                //      {dataForDetail?.approver}
-                //    </div>
-                //  }
-                //</>
+                typeof(dataForDetail?.approver) =='string' &&
+                grouplist.filter((item)=>{return item.value === dataForDetail?.approver})
               }
             </div>
             <div
@@ -286,7 +284,7 @@ const ViewLayoutFlow = (workflowJson) => {
             >
               {dataForDetail?.approver &&
                 dataForDetail?.approver != undefined &&
-                typeof dataForDetail?.approver !== "string" &&
+                typeof(dataForDetail?.approver)!== "string" &&
                 dataForDetail?.approver.map((item) => {
                   return (
                     <>
