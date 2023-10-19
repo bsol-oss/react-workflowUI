@@ -177,8 +177,8 @@ const ViewLayoutFlow = (workflowJson) => {
 
   useEffect(() => {
     setgrouplist(workflowJson.grouplist);
-  },[])
-  
+  },[workflowJson.grouplist])
+
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
     []
