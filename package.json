@@ -1,6 +1,6 @@
 {
   "name": "@bsol-oss/react-workflowui",
-  "version": "0.1.58",
+  "version": "0.1.59",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "files": [
