@@ -267,7 +267,7 @@ const ViewLayoutFlow = (workflowJson) => {
               </div>
               <div style={{ whiteSpace: "nowrap" }}>Approver:</div>
               {
-                typeof(dataForDetail?.approver) =='string' &&
+                typeof(dataForDetail?.approver) =='string'&&
                 grouplist.filter((item)=>{return item.value.toString() === dataForDetail?.approver.toString()})[0].label
               }
             </div>
