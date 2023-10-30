@@ -204,6 +204,7 @@ const ViewLayoutFlow = (workflowJson) => {
   );
 
   useLayoutEffect(() => {
+    finalSortedArray=[]
     onLayout({ direction: "DOWN" });
   }, []);
 
