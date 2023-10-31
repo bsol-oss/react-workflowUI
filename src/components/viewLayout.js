@@ -217,12 +217,33 @@ const ViewLayoutFlow = (workflowJson) => {
     }
     return "#fffb80";
   };
-
+  useEffect(() => {
+    function handleClickOutside(event) {
+      const yourDiv = document.getElementById("viewDetailDiv");
+      if (yourDiv && !yourDiv.contains(event.target)) {
+        setdataForDetail(null);
+      }
+    }
+  
+    function handleScroll(event) {
+      setdataForDetail(null);
+    }
+  
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("scroll", handleScroll);
+  
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+  
   return (
     <>
       <div style={{ width: "100%", height: "100%" }} id="rootprovider">
         {dataForDetail !== null && (
           <div
+            id="viewDetailDiv"
             style={{
               position: "fixed",
               border: "1px solid #bababa",
