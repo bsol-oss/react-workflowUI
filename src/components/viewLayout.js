@@ -289,11 +289,13 @@ const ViewLayoutFlow = (workflowJson) => {
               <div style={{ whiteSpace: "nowrap" }}>
                 Method: {dataForDetail?.method}
               </div>
-              <div style={{ whiteSpace: "nowrap" }}>Approver:</div>
+              <div style={{ whiteSpace: "nowrap" }}>
+                Approver:
               {
                 typeof(dataForDetail?.approver) =='string'&&
                 (grouplist.filter((item)=>{return item.value.toString() === dataForDetail?.approver.toString()})[0]?.label||'group not found')
               }
+              </div>
             </div>
             <div
               style={{
