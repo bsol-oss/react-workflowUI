@@ -256,6 +256,8 @@ const ViewLayoutFlow = (workflowJson) => {
               height: "fit-content",
               maxWidth: "60%",
               maxHeight: "60%",
+              minWidth:'200px',
+              minHeight:'200px',
               zIndex: "999",
               display: "sticky",
               flexDirection: "column",
