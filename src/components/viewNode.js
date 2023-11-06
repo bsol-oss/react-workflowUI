@@ -52,14 +52,28 @@ export default memo(({ data, isConnectable }) => {
             <label>Method:</label>
             <div style={{ border:"1px solid #bababa",padding: '0px 0px 0px 5px',borderRadius:'5px',backgroundColor:'white'}}>{data.method}</div>
           </div>
-          { 
-          (data.approver !== '') &&
           <div style={{ width: "200px" }}>
-              <button style={{ padding:'3px 6px',border:'1px solid #4c4cef',borderRadius:'3px',backgroundColor:'#4c4cef',color:'white',width:'100%',height:"30px"}} onClick={() => data.viewDetail(data)}>
+            <label>Status:</label>
+            <div style={{ border:"1px solid #bababa",padding: '0px 0px 0px 5px',borderRadius:'5px',backgroundColor:'white'}}>{data.status}</div>
+          </div>
+          <div style={{ width: "200px" }}>
+          {
+              typeof(data?.approver) =='string'&&
+              //dataForDetail?.approver
+              <>
+              <label>Approver group:</label>
+              <div style={{ border:"1px solid #bababa",padding: '0px 0px 0px 5px',borderRadius:'5px',backgroundColor:'white'}}>{
+                (data.grouplist.filter((item)=>{return item.value.toString() === data?.approver.toString()})[0]?.label || 'group id not found')
+                }</div>
+              </>
+              
+          }
+          </div>
+          <div style={{ width: "200px" }}>
+              <button style={{ padding:'3px 6px',border:'1px solid #4c4cef',borderRadius:'3px',backgroundColor:'#4c4cef',color:'white',width:'100%',height:"20px"}} onClick={() => data.viewDetail(data)}>
                 View
               </button>
           </div>
-          }
           <div style={{ width: "200px" }}>
             <label>Next Action:</label>
             {
@@ -67,15 +81,14 @@ export default memo(({ data, isConnectable }) => {
                 style={{
                   width: "200px",
                   display: "flex",
-                  justifyContent: "space-between",
-                  marginBottom: '-15px'
+                  justifyContent: "space-between"
                 }}
               >
-                <div style={{ borderRadius:'5px', width: "90px",textAlign:"center" }}>
-                  Approve
+                <div style={{ borderRadius:'5px',border: "1px solid #bababa", width: "90px",textAlign:"center",backgroundColor:'white' }}>
+                  Approved
                 </div>
-                <div style={{ borderRadius:'5px', width: "90px",textAlign:"center" }}>
-                  Reject
+                <div style={{ borderRadius:'5px',border: "1px solid #bababa", width: "90px",textAlign:"center",backgroundColor:'white' }}>
+                  Rejected
                 </div>
               </div>
             }
