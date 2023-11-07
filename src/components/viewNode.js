@@ -70,7 +70,7 @@ export default memo(({ data, isConnectable }) => {
           }
           </div>
           <div style={{ width: "200px" }}>
-              <button style={{ padding:'3px 6px',border:'1px solid #4c4cef',borderRadius:'3px',backgroundColor:'#4c4cef',color:'white',width:'100%',height:"20px"}} onClick={() => data.viewDetail(data)}>
+              <button style={{ padding:'3px 6px',border:'1px solid #4c4cef',borderRadius:'3px',backgroundColor:'#4c4cef',color:'white',width:'100%',height:"30px"}} onClick={() => data.viewDetail(data)}>
                 View
               </button>
           </div>
