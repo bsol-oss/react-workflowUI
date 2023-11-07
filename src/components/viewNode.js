@@ -53,10 +53,6 @@ export default memo(({ data, isConnectable }) => {
             <div style={{ border:"1px solid #bababa",padding: '0px 0px 0px 5px',borderRadius:'5px',backgroundColor:'white'}}>{data.method}</div>
           </div>
           <div style={{ width: "200px" }}>
-            <label>Status:</label>
-            <div style={{ border:"1px solid #bababa",padding: '0px 0px 0px 5px',borderRadius:'5px',backgroundColor:'white'}}>{data.status}</div>
-          </div>
-          <div style={{ width: "200px" }}>
           {
               typeof(data?.approver) =='string'&&
               //dataForDetail?.approver
