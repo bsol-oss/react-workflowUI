@@ -20,7 +20,7 @@ const nodeTypes = {
 };
 
 const nodeWidth = 225;
-const nodeHeight = 280;
+const nodeHeight = 450;
 
 const elk = new ELK();
 const elkOptions = {

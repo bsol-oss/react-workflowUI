@@ -65,7 +65,7 @@ const nodeSortValueSetting = async(nodes) =>{
   return finalSortedArray
 }
 const nodeWidth = 225;
-const nodeHeight = 280;
+const nodeHeight = 450;
 
 const getLayoutedElements = async (nodes, edges, options = {}) => {
   const isHorizontal = options?.['elk.direction'] === 'RIGHT';
