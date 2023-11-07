@@ -14,6 +14,7 @@ import viewNode from "./viewNode";
 import ELK from 'elkjs/lib/elk.bundled.js';
 import "reactflow/dist/style.css";
 import "../styles.css";
+import { RxCross1 } from "react-icons/rx";
 
 const nodeTypes = {
   selectorNode: viewNode
@@ -245,7 +246,19 @@ const LayoutFlow = (workflowJson) => {
                     padding:'15px',
                     justifyItems:'center',
                     }}>
-                <button style={{position:'absolute',right:'5px',top:'5px',width:'50px',height:'25px',color:'white',backgroundColor:'#4c4cef',border:'0px',borderRadius:'5px'}} onClick={()=>{setdataForDetail(null)}}>close</button>
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "5px",
+                      right: "5px",
+                      paddingBottom: "2px",
+                    }}
+                    onClick={() => {
+                      setdataForDetail(null);
+                    }}
+                  >
+                  <RxCross1 size="17" />
+                </div>
                 <div style={{padding:'0px 3%'}}>
                   <div style={{whiteSpace:'nowrap'}}>Task ID: {dataForDetail?.taskId}</div>
                   <div style={{whiteSpace:'nowrap'}}>Name: {dataForDetail?.name}</div>
