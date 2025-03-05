@@ -100,7 +100,7 @@ const getLayoutedElements = async (nodes, edges, options = {}) => {
 const workflowToNodesEdges = (workflowJson,grouparray) => {
   let tempNodes = [];
   let tempEdges = [];
-  workflowJson.forEach((data, index) => {
+  workflowJson?.forEach((data, index) => {
     data.approverOpt = grouparray;
     let tempNode = {
       id: data.taskId.toString(),
@@ -151,7 +151,7 @@ const LayoutFlow = (workflowJson) => {
   },[nodes])
   useEffect(()=>{
     console.log('workflowJson: ', workflowJson);
-    if(workflowJson.workflowJson === null){
+    if(workflowJson?.workflowJson === null){
       return;
     }
     const { nodes: tempNodes1, edges: tempEdges1 } = workflowToNodesEdges(workflowJson.workflowJson,workflowJson.grouparray);
@@ -312,7 +312,6 @@ const LayoutFlow = (workflowJson) => {
             onInit={setReactFlowInstance}
             onDrop={onDrop}
             onDragOver={onDragOver}
-            fitView
             onLoad={(instance) => setTimeout(() => instance.fitView(), 0)}
           >
             <MiniMap nodeColor={nodeColor} nodeStrokeWidth={3} zoomable pannable />
